@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         coin: {
-            type: DataTypes.INTEGER.UNSIGNED
+            type: DataTypes.FLOAT.UNSIGNED.ZEROFILL,
+            allowNull: false
         }
     },{
         tableName: 'user',

@@ -1,23 +1,27 @@
 const { sequelize } = require(".");
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('admin', {
-        id: {
+    return sequelize.define('picture', {
+        pictureid: {
             type: DataTypes.STRING(100),
             allowNull: false,
             primaryKey: true,
             unique: true
         },
-        password: {
+        userid: {
             type: DataTypes.STRING(100),
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'user',
+                key: 'id'
+            }
         },
-        coin: {
-            type: DataTypes.FLOAT.UNSIGNED.ZEROFILL,
+        adress: {
+            type: DataTypes.STRING(100),
             allowNull: false
         }
     },{
-        tableName: 'admin',
+        tableName: 'picture',
         timestamps: false
     })
 }

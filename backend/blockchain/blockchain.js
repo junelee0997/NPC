@@ -43,4 +43,6 @@ BlockChain.prototype.proofOfWork = function(previousBlockHash, currentBlockData)
 	}
 	return nonce
 }
-module.exports = BlockChain
+
+const bitcoin = new BlockChain()
+module.exports = bitcoin

@@ -7,7 +7,7 @@ var User = db.User
 router.get('/', function(req, res, next) {
   res.send('메인 페이지!');
 });
-router.get('/wallet', function(req, res, next) {
+router.get('/wallet', async function(req, res, next) {
   let result = await User.findOne({
     where: {
       id: req.body.id
