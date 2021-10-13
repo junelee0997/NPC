@@ -31,7 +31,7 @@ router.post('/login', async function(req, res, next) {
 });
 //사용자:로그인(post), 회원가입(post), 사진 전송(post), 코인 정보 받기(get), 
 //관리자:로그인(post), 회원가입(post), 사진 받기(get), 코인 지급(put), 승인 대기 목록(get), 유저가 보낸 사진(get)
-//변수 아이디(id), 비밀번호(password), 코인 개수(coin), 전기세(elec), 수도세(water), 전기세인지 수도세인지 사진 종류 변수(mode)
+//백엔드에 신호 보낼 때 변수 이름 아이디(id), 비밀번호(password), 코인 개수(coin), 전기세(elec), 수도세(water), 전기세인지 수도세인지 사진 종류 변수(mode)
 router.put('/approve/:id', async function(req, res, next) {
   if(req.headers['id'] == 'npc'){
     if(req.body.mode == 'elec'){
