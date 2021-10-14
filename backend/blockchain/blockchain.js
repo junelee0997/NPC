@@ -16,6 +16,7 @@ BlockChain.prototype.createNewBlock = function(nonce, previousBlockHash, hash){
 	}
 	this.chain.push(newblock)
 	this.pendingTransaction = []
+	return newblock
 }
 BlockChain.prototype.getLastBlock = function(){
 	return this.chain[this.chain.length-1]

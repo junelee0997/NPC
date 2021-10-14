@@ -3,9 +3,10 @@ const { sequelize } = require(".");
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('picture', {
         pictureid: {
-            type: DataTypes.STRING(100),
+            type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
+            autoIncrement: true,
             unique: true
         },
         userid: {

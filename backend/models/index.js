@@ -9,4 +9,5 @@ var sequelize = new Sequelize(config.database, config.username, config.password,
 db.sequelize = sequelize;
 db.User = require('./user.js')(sequelize, Sequelize)
 db.Admin = require('./admin.js')(sequelize, Sequelize)
+db.Picture = require('./picture.js')(sequelize, Sequelize)
 module.exports = db
