@@ -10,4 +10,6 @@ db.sequelize = sequelize;
 db.User = require('./user.js')(sequelize, Sequelize)
 db.Admin = require('./admin.js')(sequelize, Sequelize)
 db.Picture = require('./picture.js')(sequelize, Sequelize)
+db.Record = require('./record.js')(sequelize, Sequelize)
+db.Product = require('./product.js')(sequelize, Sequelize)
 module.exports = db

@@ -3,8 +3,10 @@ var router = express.Router();
 var db = require('../models/index');
 const user = require('../models/user');
 const picture = require('../models/picture');
+const product = require('../models/product');
 var User = db.User
 var Picture = db.Picture
+var Product = db.Product
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('메인 페이지!');
@@ -45,7 +47,7 @@ router.post('/sign_up', function(req, res, next) {
       coin: 0
     })
     .then(result => {
-      res.json({message: '회원가입에 성공하였습니다', data: req.body.id});
+      res.json({message: '회원가입에 성공하였습니다'});
     })
     .catch(err => {
       console.log(err);
@@ -101,6 +103,45 @@ router.post('/sendpicture', function(req, res, next) {
     res.json({message: '오류가 발생하였습니다'});
   });
 });
+/*router.get('/productlist', async function(req, res, next){
+  let result = await Product.findAll();
+  let idlist = []
+  let response = []
+  let cost = []
+  let namelist = []
+  for(let i of result){
+    idlist.push(i.dataValues.id)
+    response.push(i.dataValues.address)
+    cost.push(i.dataValues.price)
+    namelist.push(i.dataValues.name)
+  }
+  res.json({productids: idlist, pictures: response, productnames: namelist, pricelist: cost});
+});
+router.get('/productinfo/:id', async function(req, res, next){
+  var sellid = req.params.id;
+  let result = await Product.findOne({where: {productid: sellid}});
+  res.json({picturedata: result.dataValues.address, namedata: result.dataValues.name, pricedata: result.dataValues.price});
+});
+router.post('/buy', async function(req, res, next){
+  let result = await Product.findOne({where: {productid: req.body.product}});
+  let bargain = await User.findOne({where: {id: req.body.id}});
+  if(bargain.dataValues.coin >= 8){
+    User.update({coin:bargain.dataValues.coin - 8},{where: {id: req.body.id}}).then((res) => {
+      console.log('업데이트 성공');
+      res.json({data: result.dataValues.price * 0.9});
+    }).catch((err) => {
+      console.log('업데이트 실패', err);
+    })
+  }
+  else{
+    User.update({coin:bargain.dataValues.coin},{where: {id: req.body.id}}).then((res) => {
+      console.log('업데이트 성공');
+      res.json({data: result.dataValues.price});
+    }).catch((err) => {
+      console.log('업데이트 실패', err);
+    })
+  }
+});*/
 //사용자:로그인(post), 회원가입(post), 사진 전송(post), 코인 정보 받기(get), 
-//관리자:로그인(post), 회원가입(post), 사진 받기(get), 코인 지급(put), 
+//관리자:로그인(post), 회원가입(post), 사진 받기(gt), 코인 지급(put), 
 module.exports = router;

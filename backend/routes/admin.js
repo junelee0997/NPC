@@ -3,11 +3,13 @@ var router = express.Router();
 var db = require('../models/index')
 const admin = require('../models/admin');
 const user = require('../models/user');
+const record = require('../models/record');
 const bitcoin = require('../blockchain/blockchain');
 const picture = require('../models/picture');
 var Admin = db.Admin
 var User = db.User
 var Picture = db.Picture
+var Record = db.Record
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.json({message: '관리자용 앱입니다.'});
@@ -82,6 +84,11 @@ router.put('/approve', async function(req, res, next) {
         }).catch((err) => {
           console.log('업데이트 실패', err);
         })
+        Record.create({
+          sender: 'npc',
+          get: Userid.dataValues.userid,
+          amount: coinneed
+        })
         Picture.destroy({where: {pictureid: photoid}});
       }
     }
@@ -98,17 +105,24 @@ router.put('/approve', async function(req, res, next) {
         bitcoin.createNewTransaction(coinneed, req.body.id, Userid.dataValues.userid)
         Admin.update({coin:req.body.coin - coinneed},{where: {id: "npc"}}).then((res) => {
           console.log('업데이트 성공');
+          res.json({message:'관리자 코인 가져감', data: res.dataValues.coin})
         }).catch((err) => {
           console.log('업데이트 실패', err);
         })
         let result = await User.findOne({where: {id: Userid.dataValues.userid}});
         User.update({coin:result.dataValues.coin + coinneed},{where: {id: Userid.dataValues.userid}}).then((res) => {
           console.log('업데이트 성공');
+          res.json({message:'사용자에게 코인 지급', data: res.dataValues.coin})
         }).catch((err) => {
           console.log('업데이트 실패', err);
         })
-        Picture.destroy({where: {pictureid: photoid}});
+        Record.create({
+          sender: 'npc',
+          get: Userid.dataValues.userid,
+          amount: coinneed
+        })
       }
+      Picture.destroy({where: {pictureid: photoid}});
     }
   }
 });
@@ -117,14 +131,17 @@ router.put('/approve', async function(req, res, next) {
 파라미터:
 응답 : 
     data: 사진 아이디 리스트
+    username: 유저 아이디 리스트
 */
 router.get('/picturelist', async function(req, res, next){
   let result = await Picture.findAll();
   let response = []
+  let userids = []
   for(let i of result){
     response.push(i.dataValues.pictureid)
+    userids.push(i.dataValues.userid)
   }
-  res.json({data: response});
+  res.json({data: response, username: userids});
 });
 /*
 기능 : 승인 대기 사진 리스트
@@ -134,13 +151,13 @@ router.get('/picturelist', async function(req, res, next){
   }
 응답 : 
     data: 사진 주소
+    username: 유저 아이디
 */
 router.get('/showpicture/:id', async function(req, res, next){
   var photoid = req.params.id;
   let result = await Picture.findOne({where: {pictureid: photoid}});
-  res.json({data: result.dataValues.adress});
+  res.json({data: result.dataValues.adress, username: result.dataValues.userid});
 });
-module.exports = router;
 /*
 기능: 채굴
 파라미터:
@@ -155,3 +172,4 @@ router.get('/mine', function(req, res, next){
   var newblock = bitcoin.createNewBlock(nonce,previousHash, blockhash)
   res.json({data: newblock});
 });
+module.exports = router;
