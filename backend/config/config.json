@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "hclee7909*",
+    "username": "admin",
+    "password": "12345678",
     "database": "npc",
-    "host": "127.0.0.1",
+    "host": "database-1.cjbuejtsair4.ap-northeast-2.rds.amazonaws.com",
     "dialect": "mysql",
     "define": {
       "timestamps": false
